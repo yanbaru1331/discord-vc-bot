@@ -36,12 +36,6 @@ client.on("interactionCreate", async (interaction) => {
         const member = Object(interaction.options.getMentionable("ユーザー名"));
         const channel = Object(interaction.options.getChannel("移動先チャンネル"));
 
-        // const allChannels = await interaction.guild.channels.fetch();
-        // const channelObj = allChannels.filter(c => c === channelId).first();
-        //
-        // const allMembers = await interaction.guild.members.fetch();
-        // const memberObj = allMembers.filter(m => m === memberId).first();
-
         try {
             await member.voice.setChannel(channel);
             await interaction.reply([member] + " を " + [channel] + " チャンネルに移動しました" + ", ");
