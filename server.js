@@ -1,21 +1,25 @@
-const {Client, GatewayIntentBits, SlashCommandBuilder} = require("discord.js");
+const {Client, GatewayIntentBits, SlashCommandBuilder, DiscordAPIError} = require("discord.js");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-const client = new Client({intents: [GatewayIntentBits.Guilds]});
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+});
 
 client.once("ready", async () => {
     const data = new SlashCommandBuilder()
         .setName("move")
-        .setDescription("メンバーを指定してvcチャンネルを移動します。")
+        .setDescription("ユーザーを指定してボイスチャンネルを移動します。")
         .addMentionableOption(option => option
-            .setName("移動するメンバー")
-            .setDescription("移動するメンバーの名前（例. @VCチャンネル移動bot）")
+            .setName("ユーザー名")
+            .setDescription("移動するユーザーの名前（例. @VCチャンネル移動bot）")
+            .setRequired(true)
         ).addChannelOption(option => option
             .setName("移動先チャンネル")
             .setDescription("移動先チャンネルの名称（例. 一般）")
             .addChannelTypes(2)
+            .setRequired(true)
         );
 
     await client.application.commands.set([data], process.env.SERVER_ID);
@@ -29,17 +33,28 @@ client.on("interactionCreate", async (interaction) => {
         return;
     }
     if (interaction.commandName === "move") {
-        const memberId = interaction.options.getMentionable("移動するメンバー");
-        const channelId = interaction.options.getChannel("移動先チャンネル");
-        const mention = "<@" + memberId + ">";
+        const member = Object(interaction.options.getMentionable("ユーザー名"));
+        const channel = Object(interaction.options.getChannel("移動先チャンネル"));
 
-        const channels = await interaction.guild.channels.fetch();
-        const channel = channels.filter(c => c.type === 2 && c.name === channelId.name);
+        // const allChannels = await interaction.guild.channels.fetch();
+        // const channelObj = allChannels.filter(c => c === channelId).first();
+        //
+        // const allMembers = await interaction.guild.members.fetch();
+        // const memberObj = allMembers.filter(m => m === memberId).first();
 
-        if (channel.size >= 0) {
-            await interaction.reply(mention + " を " + channel.toJSON() + " チャンネルに移動しました");
-        } else {
-            await interaction.reply("エラー: vcチャンネルが存在しません");
+        try {
+            await member.voice.setChannel(channel);
+            await interaction.reply([member] + " を " + [channel] + " チャンネルに移動しました" + ", ");
+        } catch (e) {
+            if (e instanceof DiscordAPIError) {
+                if (e.rawError.code === 40032) {
+                    await interaction.reply("エラー (" + e.rawError.code + ")： ユーザーがボイスチャンネル上に存在しません");
+                } else {
+                    await interaction.reply("エラー (" + e.rawError.code + ")： ボイスチャンネルの移動に失敗しました");
+                }
+            } else {
+                await interaction.reply("エラー (-1)： ボイスチャンネルの移動に失敗しました");
+            }
         }
     }
 });
