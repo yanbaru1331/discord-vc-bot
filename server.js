@@ -10,8 +10,7 @@ client.once("ready", async () => {
         name: "ping",
         description: "Replies with Pong!",
     }];
-    const serverId = "1044028084023722066"
-    await client.application.commands.set(data, serverId);
+    await client.application.commands.set(data, process.env.SERVER_ID);
     console.log("Ready!");
 });
 
