@@ -13,8 +13,9 @@ client.once("ready", async () => {
             .setName("移動するメンバー")
             .setDescription("移動するメンバーの名前（例. @VCチャンネル移動bot）")
         ).addChannelOption(option => option
-            .setName("移動するチャンネル")
-            .setDescription("移動するチャンネルの名称（例. 一般）")
+            .setName("移動先チャンネル")
+            .setDescription("移動先チャンネルの名称（例. 一般）")
+            .addChannelTypes(2)
         );
 
     await client.application.commands.set([data], process.env.SERVER_ID);
@@ -29,9 +30,16 @@ client.on("interactionCreate", async (interaction) => {
     }
     if (interaction.commandName === "move") {
         const memberId = interaction.options.getMentionable("移動するメンバー");
-        const channelId = interaction.options.getChannel("移動するチャンネル");
+        const channelId = interaction.options.getChannel("移動先チャンネル");
         const mention = "<@" + memberId + ">";
 
-        await interaction.reply(mention + "を " + channelId.name + " チャンネルに移動しました");
+        const channels = await interaction.guild.channels.fetch();
+        const channel = channels.filter(c => c.type === 2 && c.name === channelId.name);
+
+        if (channel.size >= 0) {
+            await interaction.reply(mention + " を " + channel.toJSON() + " チャンネルに移動しました");
+        } else {
+            await interaction.reply("エラー: vcチャンネルが存在しません");
+        }
     }
 });
