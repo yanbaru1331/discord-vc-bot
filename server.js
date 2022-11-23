@@ -11,7 +11,7 @@ client.once("ready", async () => {
     const data = new SlashCommandBuilder()
         .setName("move")
         .setDescription("ユーザーを指定してボイスチャンネルを移動します。")
-        .addMentionableOption(option => option
+        .addUserOption(option => option
             .setName("ユーザー名")
             .setDescription("移動するユーザーの名前（例. @VCチャンネル移動bot）")
             .setRequired(true)
@@ -33,13 +33,17 @@ client.on("interactionCreate", async (interaction) => {
         return;
     }
     if (interaction.commandName === "move") {
-        const member = Object(interaction.options.getMentionable("ユーザー名"));
+        const user = Object(interaction.options.getUser("ユーザー名"));
         const channel = Object(interaction.options.getChannel("移動先チャンネル"));
+
+        const allMembers = await interaction.guild.members.fetch();
+        const member = allMembers.filter(m => m.id === user.id).first();
 
         try {
             await member.voice.setChannel(channel);
             await interaction.reply([member] + " を " + [channel] + " チャンネルに移動しました" + ", ");
         } catch (e) {
+            console.error(e);
             if (e instanceof DiscordAPIError) {
                 if (e.rawError.code === 40032) {
                     await interaction.reply("エラー (" + e.rawError.code + ")： ユーザーがボイスチャンネル上に存在しません");
