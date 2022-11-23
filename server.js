@@ -99,19 +99,28 @@ client.on("interactionCreate", async (interaction) => {
     }
 
     async function successReply(member, channel) {
-        await interaction.reply([member] + " を " + [channel] + " チャンネルに移動しました" + ", ");
+        await interaction.reply([member] + " を " + [channel] + " チャンネルに移動しました");
     }
 
     async function errorReply(e) {
         console.error(e);
         if (e instanceof DiscordAPIError) {
             if (e.rawError.code === 40032) {
-                await interaction.reply("エラー (" + e.rawError.code + ")： ユーザーがボイスチャンネル上に存在しません");
+                await interaction.reply({
+                    content: "エラー (" + e.rawError.code + ")： 対象ユーザーがボイスチャンネルに接続されていません",
+                    ephemeral: true
+                });
             } else {
-                await interaction.reply("エラー (" + e.rawError.code + ")： ボイスチャンネルの移動に失敗しました");
+                await interaction.reply({
+                    content: "エラー (" + e.rawError.code + ")： ボイスチャンネルの移動に失敗しました",
+                    ephemeral: true
+                });
             }
         } else {
-            await interaction.reply("エラー (-1)： ボイスチャンネルの移動に失敗しました");
+            await interaction.reply({
+                content: "エラー (-1)： ボイスチャンネルの移動に失敗しました",
+                ephemeral: true
+            });
         }
     }
 });
