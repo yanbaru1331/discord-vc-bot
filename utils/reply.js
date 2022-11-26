@@ -4,6 +4,9 @@ module.exports = {
     async successReply(interaction, member, channel) {
         await interaction.reply([member] + " を " + [channel] + " チャンネルに移動しました");
     },
+    async successChannelReply(interaction, channelFrom, channelTo) {
+        await interaction.reply([channelFrom] + " から " + [channelTo] + " チャンネルに移動しました");
+    },
     async errorReply(interaction, e) {
         console.error(e);
         if (e instanceof DiscordAPIError) {
@@ -24,5 +27,11 @@ module.exports = {
                 ephemeral: true
             });
         }
+    },
+    async errorChannelReply(interaction) {
+        await interaction.reply({
+            content: "エラー (40000)： ボイスチャンネルに接続する必要があります",
+            ephemeral: true
+        });
     }
 }
