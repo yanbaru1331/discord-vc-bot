@@ -1,7 +1,8 @@
-const {Client, GatewayIntentBits} = require("discord.js");
+const {Client, GatewayIntentBits, Collection, Events} = require("discord.js");
 const dotenv = require("dotenv");
 const fs = require("fs");
 const {errorReply} = require("./utils/reply");
+const path = require("path");
 
 dotenv.config();
 
@@ -9,33 +10,40 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
 
-const commands = {}
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+client.once(Events.ClientReady, c => {
+    client.commands = new Collection();
 
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    commands[command.data.name] = command
-}
+    const commandsPath = path.join(__dirname, "commands");
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 
-client.once("ready", async () => {
-    const data = []
-    for (const commandName in commands) {
-        data.push(commands[commandName].data)
+    for (const file of commandFiles) {
+        const filePath = path.join(commandsPath, file);
+        const command = require(filePath);
+
+        if ("data" in command && "execute" in command) {
+            client.commands.set(command.data.name, command);
+        } else {
+            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        }
     }
-    await client.application.commands.set(data, process.env.SERVER_ID);
-    console.log("Ready!");
+
+    console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.login(process.env.DISCORD_TOKEN).then();
+client.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isChatInputCommand()) return;
 
-client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isCommand()) {
+    const command = interaction.client.commands.get(interaction.commandName);
+    if (!command) {
+        console.error(`No command matching ${interaction.commandName} was found.`);
         return;
     }
+
     try {
-        const command = commands[interaction.commandName];
         await command.execute(interaction);
     } catch (e) {
         await errorReply(interaction, e);
     }
 });
+
+client.login(process.env.DISCORD_TOKEN).then();
