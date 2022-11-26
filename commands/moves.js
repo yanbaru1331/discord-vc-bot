@@ -33,7 +33,6 @@ module.exports = {
                 .setName("5")
                 .setDescription("移動するユーザーの名前5")
         ),
-
     async execute(interaction) {
         const channel = Object(interaction.options.getChannel("移動先チャンネル"));
 

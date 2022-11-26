@@ -17,7 +17,6 @@ module.exports = {
                 .setDescription("移動するユーザーの名前（例. @VCチャンネル移動bot）")
                 .setRequired(true)
         ),
-
     async execute(interaction) {
         const channel = Object(interaction.options.getChannel("移動先チャンネル"));
         const user = Object(interaction.options.getUser("ユーザー名"));

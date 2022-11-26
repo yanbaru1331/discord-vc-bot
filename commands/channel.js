@@ -12,7 +12,6 @@ module.exports = {
                 .addChannelTypes(2)
                 .setRequired(true)
         ),
-
     async execute(interaction) {
         let channelFrom = interaction.member.voice.channel;
         const channelTo = Object(interaction.options.getChannel("移動先"));
