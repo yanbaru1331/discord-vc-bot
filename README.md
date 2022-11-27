@@ -23,5 +23,25 @@
 /channel (移動先チャンネル)
 ```
 
+# カスタマイズする場合
+※ Node v16.9.0 以降が必要です。
+
+```
+git clone https://github.com/sakusaku3939/discord-vc-bot.git
+cd discord-vc-bot
+```
+```
+npm install
+```
+
+[Discord Developer Portal](https://discord.com/developers/applications) から新しいアプリケーションを作成し、トークンを `DISCORD_TOKEN` に貼り付けます。
+```
+echo 'DISCORD_TOKEN="(BOTトークン)"' > .env
+```
+以下のコマンドで開始できます。
+```
+node server.js
+```
+
 # License
 [MIT](https://github.com/sakusaku3939/remove-slideshare-limit/blob/master/LICENSE)
