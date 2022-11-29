@@ -1,20 +1,24 @@
+import {SlashCommandBuilder} from "discord.js";
+import {SlashCommandChannelOption} from "@discordjs/builders";
+import {CommandInteraction, CommandInteractionOptionResolver, VoiceBasedChannel} from "discord.js";
+
 const {successChannelReply, errorChannelReply} = require("../utils/reply");
-const {SlashCommandBuilder} = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("channel")
         .setDescription("ボイスチャンネルを指定して、その中にいるメンバー全員を移動します。")
-        .addChannelOption(
-            option => option
+        .addChannelOption((option: SlashCommandChannelOption) =>
+            option
                 .setName("移動先")
                 .setDescription("移動先チャンネルの名称（例. 一般）")
                 .addChannelTypes(2)
                 .setRequired(true)
         ),
-    async execute(interaction) {
-        let channelFrom = interaction.member.voice.channel;
-        const channelTo = Object(interaction.options.getChannel("移動先"));
+    async execute(interaction: CommandInteraction) {
+        let channelFrom = (interaction.member as any).voice.channel;
+        const options = interaction.options as CommandInteractionOptionResolver;
+        const channelTo = options.getChannel("移動先") as VoiceBasedChannel;
 
         if (channelFrom == null) {
             await errorChannelReply(interaction)

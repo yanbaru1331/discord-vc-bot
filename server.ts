@@ -1,20 +1,21 @@
-const {Client, GatewayIntentBits, Collection, Events} = require("discord.js");
-const dotenv = require("dotenv");
-const fs = require("fs");
+import {Client, Interaction, GatewayIntentBits, Collection, Events} from "discord.js";
+import dotenv = require("dotenv");
+import fs = require("fs");
+import path from "path";
+
 const {errorReply} = require("./utils/reply");
-const path = require("path");
 
 dotenv.config();
 
-const client = new Client({
+const client: any = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates],
 });
 
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, (c: Client) => {
     client.commands = new Collection();
 
     const commandsPath = path.join(__dirname, "commands");
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
+    const commandFiles = fs.readdirSync(commandsPath).filter((file: string) => file.endsWith(".ts"));
 
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
@@ -27,13 +28,13 @@ client.once(Events.ClientReady, c => {
         }
     }
 
-    console.log(`Ready! Logged in as ${c.user.tag}`);
+    console.log(`Ready! Logged in as ${c.user?.tag}`);
 });
 
-client.on(Events.InteractionCreate, async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction: Interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
-    const command = interaction.client.commands.get(interaction.commandName);
+    const command = client.commands.get(interaction.commandName);
     if (!command) {
         console.error(`No command matching ${interaction.commandName} was found.`);
         return;
