@@ -40,7 +40,7 @@ echo 'DISCORD_TOKEN="(BOTトークン)"' > .env
 ```
 以下のコマンドで開始できます。
 ```
-node server.js
+ts-node server.ts
 ```
 
 # License
