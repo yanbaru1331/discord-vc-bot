@@ -1,8 +1,7 @@
-import {SlashCommandBuilder} from "discord.js";
+import {SlashCommandBuilder, CommandInteraction, CommandInteractionOptionResolver, VoiceBasedChannel} from "discord.js";
 import {SlashCommandChannelOption} from "@discordjs/builders";
-import {CommandInteraction, CommandInteractionOptionResolver, VoiceBasedChannel} from "discord.js";
 
-const {successChannelReply, errorChannelReply} = require("../utils/reply");
+import {successChannelReply, errorChannelReply} from "../utils/reply";
 
 module.exports = {
     data: new SlashCommandBuilder()

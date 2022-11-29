@@ -1,13 +1,12 @@
-import {SlashCommandBuilder} from "discord.js";
-import {SlashCommandChannelOption} from "@discordjs/builders";
 import {
+    SlashCommandBuilder,
     CommandInteraction,
     CommandInteractionOptionResolver,
     SlashCommandUserOption,
     VoiceBasedChannel
 } from "discord.js";
-
-const {successReply} = require("../utils/reply");
+import {SlashCommandChannelOption} from "@discordjs/builders";
+import {successReply} from "../utils/reply";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,7 +30,7 @@ module.exports = {
         const allMembers = await interaction.guild!.members.fetch();
         const member = allMembers.filter(m => m.id === user.id).first();
 
-        await member?.voice.setChannel(channel);
-        await successReply(interaction, member, channel);
+        await member!.voice.setChannel(channel);
+        await successReply(interaction, member!, channel);
     }
 }

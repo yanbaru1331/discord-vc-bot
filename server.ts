@@ -2,8 +2,7 @@ import {Client, Interaction, GatewayIntentBits, Collection, Events} from "discor
 import dotenv = require("dotenv");
 import fs = require("fs");
 import path from "path";
-
-const {errorReply} = require("./utils/reply");
+import {errorReply} from "./utils/reply";
 
 dotenv.config();
 
