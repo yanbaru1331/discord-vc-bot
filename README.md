@@ -2,7 +2,7 @@
 ユーザーを指定してボイスチャンネルを移動することができるDiscordボットです。  
 複数ユーザーやチャンネルごとの移動にも対応しています。  
 
-[→ Discordに追加する](https://discord.com/api/oauth2/authorize?client_id=1044007415680598068&permissions=16780288&scope=bot%20applications.commands)  
+[→ Discordに追加する](https://discord.com/api/oauth2/authorize?client_id=1044007415680598068&permissions=2164262912&scope=bot%20applications.commands)  
 
 ![vc-bot](https://user-images.githubusercontent.com/53967490/204147634-c96a0a1c-a938-457f-afda-93d12533b453.gif)
 
