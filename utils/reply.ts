@@ -30,10 +30,3 @@ export async function errorReply(interaction: CommandInteraction, e: any) {
         });
     }
 }
-
-export async function errorChannelReply(interaction: CommandInteraction) {
-    await interaction.reply({
-        content: "エラー (40000)： ボイスチャンネルに接続する必要があります",
-        ephemeral: true
-    });
-}

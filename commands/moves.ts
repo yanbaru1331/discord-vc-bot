@@ -21,24 +21,24 @@ module.exports = {
                 .setRequired(true)
         ).addUserOption((option: SlashCommandUserOption) =>
             option
-                .setName("1")
+                .setName("ユーザー1")
                 .setDescription("移動するユーザーの名前1")
                 .setRequired(true)
         ).addUserOption((option: SlashCommandUserOption) =>
             option
-                .setName("2")
+                .setName("ユーザー2")
                 .setDescription("移動するユーザーの名前2")
         ).addUserOption((option: SlashCommandUserOption) =>
             option
-                .setName("3")
+                .setName("ユーザー3")
                 .setDescription("移動するユーザーの名前3")
         ).addUserOption((option: SlashCommandUserOption) =>
             option
-                .setName("4")
+                .setName("ユーザー4")
                 .setDescription("移動するユーザーの名前4")
         ).addUserOption((option: SlashCommandUserOption) =>
             option
-                .setName("5")
+                .setName("ユーザー5")
                 .setDescription("移動するユーザーの名前5")
         ),
     async execute(interaction: CommandInteraction) {
