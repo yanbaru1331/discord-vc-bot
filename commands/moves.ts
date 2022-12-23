@@ -45,7 +45,7 @@ module.exports = {
         const options = interaction.options as CommandInteractionOptionResolver;
         const channel = options.getChannel("移動先チャンネル") as VoiceBasedChannel;
 
-        const getUser = (n: number) => options.getUser(n.toString());
+        const getUser = (n: number) => options.getUser(`ユーザー${n}`);
         let users: { [p: string]: User | null } = {};
 
         for (let i = 1; i <= 5; i++) {
