@@ -1,4 +1,4 @@
-import {CommandInteraction, VoiceBasedChannel} from "discord.js";
+import {ButtonInteraction, CommandInteraction, VoiceBasedChannel} from "discord.js";
 import {DiscordAPIError} from "discord.js";
 
 export async function successReply(interaction: CommandInteraction, member: any, channel: VoiceBasedChannel) {
@@ -9,7 +9,7 @@ export async function successChannelReply(interaction: CommandInteraction, chann
     await interaction.reply(`${[channelFrom]} から ${[channelTo]} チャンネルに移動しました`);
 }
 
-export async function errorReply(interaction: CommandInteraction, e: any) {
+export async function errorReply(interaction: CommandInteraction | ButtonInteraction, e: any) {
     console.error(e);
     if (e instanceof DiscordAPIError) {
         if (e.code === 40032) {
@@ -29,4 +29,11 @@ export async function errorReply(interaction: CommandInteraction, e: any) {
             ephemeral: true
         });
     }
+}
+
+export async function errorChannelReply(interaction: CommandInteraction | ButtonInteraction) {
+    await interaction.reply({
+        content: "エラー (40000)： ボイスチャンネルに接続する必要があります",
+        ephemeral: true
+    });
 }

@@ -1,4 +1,11 @@
-import {Client, Interaction, GatewayIntentBits, Collection, Events} from "discord.js";
+import {
+    Client,
+    Interaction,
+    GatewayIntentBits,
+    Collection,
+    Events,
+    DiscordAPIError
+} from "discord.js";
 import dotenv = require("dotenv");
 import fs = require("fs");
 import path from "path";
@@ -31,6 +38,39 @@ client.once(Events.ClientReady, (c: Client) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction: Interaction) => {
+    if (interaction.isButton() && interaction.customId === "moveChannel") {
+        let users: { [p: string]: string } = {};
+
+        for (const embed of interaction.message.embeds) {
+            const members = embed.data.description ?? ""
+            const channel = embed.data.title ?? "";
+            for (const member of members.split(",")) {
+                users[member] = channel;
+            }
+        }
+
+        const allMembers = await interaction.guild!.members.fetch();
+        const allChannels = await interaction.guild!.channels.fetch();
+        const members = allMembers.filter(m => Object.keys(users).includes(`<@${m.id.toString()}>`));
+
+        try {
+            for (const member of members.values()) {
+                const channel = allChannels.filter(c => users[`<@${member.id.toString()}>`].includes(`<#${c?.id.toString()}>`));
+                await member.voice.setChannel(channel.first() as any);
+            }
+            await interaction.reply({
+                content: "ボイスチャンネルを移動しました",
+            });
+        } catch (e) {
+            if (e instanceof DiscordAPIError && e.code === 40032) {
+                await interaction.reply({
+                    content: "ボイスチャンネルを移動しました",
+                });
+            } else {
+                await errorReply(interaction, e);
+            }
+        }
+    }
     if (!interaction.isChatInputCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
