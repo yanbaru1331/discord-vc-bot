@@ -55,7 +55,7 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
 
         try {
             for (const member of members.values()) {
-                const channel = allChannels.filter(c => users[`<@${member.id.toString()}>`].includes(`<#${c?.id.toString()}>`));
+                const channel = allChannels.filter(c => users[`<@${member.id.toString()}>`].includes(<string>c?.name.toString()));
                 await member.voice.setChannel(channel.first() as any);
             }
             await interaction.reply({

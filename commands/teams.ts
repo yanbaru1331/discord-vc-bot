@@ -42,12 +42,12 @@ module.exports = {
 
         const embed1 = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(channel1.toString())
+            .setTitle(channel1.name)
             .setDescription(half[0].toString());
 
         const embed2 = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(channel2.toString())
+            .setTitle(channel2.name)
             .setDescription(half[1].toString());
 
         const row = new ActionRowBuilder()
