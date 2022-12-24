@@ -33,11 +33,11 @@ module.exports = {
         let currentChannel = (interaction.member as any).voice.channel;
 
         if (currentChannel == null) {
-            await errorChannelReply(interaction)
+            await errorChannelReply(interaction);
             return;
         }
 
-        const shuffleMembers = shuffle((currentChannel.members.values()))
+        const shuffleMembers = shuffle((currentChannel.members.values()));
         const half = splitHalf(shuffleMembers);
 
         const embed1 = new EmbedBuilder()

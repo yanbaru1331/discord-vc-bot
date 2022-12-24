@@ -42,7 +42,7 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
         let users: { [p: string]: string } = {};
 
         for (const embed of interaction.message.embeds) {
-            const members = embed.data.description ?? ""
+            const members = embed.data.description ?? "";
             const channel = embed.data.title ?? "";
             for (const member of members.split(",")) {
                 users[member] = channel;
