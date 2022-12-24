@@ -9,38 +9,33 @@ module.exports = {
         .setDescription("ボイスチャンネルを指定して、その中にいるメンバー全員を移動します。")
         .addChannelOption((option: SlashCommandChannelOption) =>
             option
-                .setName("どこに")
+                .setName("移動先")
                 .setDescription("移動先チャンネルの名称（例. 一般）")
                 .addChannelTypes(2)
                 .setRequired(true)
         ).addChannelOption((option: SlashCommandChannelOption) =>
             option
-                .setName("どこから")
+                .setName("移動元")
                 .setDescription("移動元チャンネルの名称（例. ロビー）")
                 .addChannelTypes(2)
         ),
     async execute(interaction: CommandInteraction) {
         const options = interaction.options as CommandInteractionOptionResolver;
-        const channelTo = options.getChannel("どこに") as VoiceBasedChannel;
-        let channelFrom = options.getChannel("どこから") as VoiceBasedChannel;
+        const channelTo = options.getChannel("移動先") as VoiceBasedChannel;
+        let channelFrom = options.getChannel("移動元") as VoiceBasedChannel;
+
+        const currentChannel = (interaction.member as any).voice.channel;
+        channelFrom = channelFrom ?? currentChannel;
 
         if (channelFrom == null) {
-            const currentChannel = (interaction.member as any).voice.channel;
-            if (currentChannel == null) {
-                await errorChannelReply(interaction)
-                return;
-            } else {
-                channelFrom = currentChannel;
-            }
+            await errorChannelReply(interaction)
+            return;
         }
 
-        const channelMembers = channelFrom.members;
-        let peopleCount = 0;
-
-        for (const member of channelMembers.values()) {
+        for (const member of channelFrom.members.values()) {
             await member.voice.setChannel(channelTo);
-            peopleCount++;
         }
+
         await successChannelReply(interaction, channelFrom, channelTo);
     },
 }
