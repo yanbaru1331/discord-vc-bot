@@ -54,21 +54,19 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
         const allVoiceChannels = allChannels.filter(c => c?.type == 2);
         const members = allMembers.filter(m => Object.keys(users).includes(`<@${m.id.toString()}>`));
 
-        try {
-            for (const member of members.values()) {
+        for (const member of members.values()) {
+            try {
                 const channel = allVoiceChannels.filter(c =>
                     users[`<@${member.id.toString()}>`].includes(<string>c?.name.toString())
                 ).first();
                 await member.voice.setChannel(channel as VoiceBasedChannel);
-            }
-            await successMoveReply(interaction);
-        } catch (e) {
-            if (!(e instanceof DiscordAPIError && e.code === 40032)) {
-                await errorReply(interaction, e);
-            } else {
-                await successMoveReply(interaction);
+            } catch (e) {
+                if (!(e instanceof DiscordAPIError && e.code === 40032)) {
+                    await errorReply(interaction, e);
+                }
             }
         }
+        await successMoveReply(interaction);
     }
     if (!interaction.isChatInputCommand()) return;
 

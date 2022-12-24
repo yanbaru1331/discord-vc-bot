@@ -57,14 +57,14 @@ module.exports = {
         const members = allMembers.filter(m => m.id in users);
         const movedMembers = new Collection<string, GuildMember>();
 
-        try {
-            for (const member of members) {
+        for (const member of members) {
+            try {
                 await member[1].voice.setChannel(channel);
                 movedMembers.set(member[0], member[1]);
-            }
-        } catch (e) {
-            if (!(e instanceof DiscordAPIError && e.code === 40032)) {
-                await errorReply(interaction, e);
+            } catch (e) {
+                if (!(e instanceof DiscordAPIError && e.code === 40032)) {
+                    await errorReply(interaction, e);
+                }
             }
         }
 
