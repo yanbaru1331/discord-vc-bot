@@ -33,7 +33,7 @@ export async function errorReply(interaction: CommandInteraction | ButtonInterac
 
 export async function errorConnectReply(interaction: CommandInteraction) {
     await interaction.reply({
-        content: `エラー (40032)： 対象ユーザーがボイスチャンネルに接続されていません`,
+        content: "エラー (40032)： 対象ユーザーがボイスチャンネルに接続されていません",
         ephemeral: true
     });
 }
@@ -41,6 +41,13 @@ export async function errorConnectReply(interaction: CommandInteraction) {
 export async function errorChannelReply(interaction: CommandInteraction | ButtonInteraction) {
     await interaction.reply({
         content: "エラー (40000)： ボイスチャンネルに接続する必要があります",
+        ephemeral: true
+    });
+}
+
+export async function errorLackPeopleReply(interaction: CommandInteraction) {
+    await interaction.reply({
+        content: "エラー (40001)： 2人以上のユーザーがボイスチャンネルに接続している必要があります",
         ephemeral: true
     });
 }

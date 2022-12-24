@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import {SlashCommandChannelOption} from "@discordjs/builders";
 
-import {errorChannelReply} from "../utils/reply";
+import {errorChannelReply, errorLackPeopleReply} from "../utils/reply";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -30,14 +30,20 @@ module.exports = {
         const options = interaction.options as CommandInteractionOptionResolver;
         const channel1 = options.getChannel("チーム1") as VoiceBasedChannel;
         const channel2 = options.getChannel("チーム2") as VoiceBasedChannel;
-        let currentChannel = (interaction.member as any).voice.channel;
 
+        let currentChannel = (interaction.member as any).voice.channel;
         if (currentChannel == null) {
             await errorChannelReply(interaction);
             return;
         }
 
-        const shuffleMembers = shuffle((currentChannel.members.values()));
+        const members = currentChannel.members;
+        if (members.size < 2) {
+            await errorLackPeopleReply(interaction);
+            return;
+        }
+
+        const shuffleMembers = shuffle(members.values());
         const half = splitHalf(shuffleMembers);
 
         const embed1 = new EmbedBuilder()
