@@ -4,12 +4,12 @@ import {
     GatewayIntentBits,
     Collection,
     Events,
-    DiscordAPIError
+    DiscordAPIError, VoiceBasedChannel
 } from "discord.js";
 import dotenv = require("dotenv");
 import fs = require("fs");
 import path from "path";
-import {errorReply} from "./utils/reply";
+import {errorReply, successMoveReply} from "./utils/reply";
 
 dotenv.config();
 
@@ -51,23 +51,22 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
 
         const allMembers = await interaction.guild!.members.fetch();
         const allChannels = await interaction.guild!.channels.fetch();
+        const allVoiceChannels = allChannels.filter(c => c?.type == 2);
         const members = allMembers.filter(m => Object.keys(users).includes(`<@${m.id.toString()}>`));
 
         try {
             for (const member of members.values()) {
-                const channel = allChannels.filter(c => users[`<@${member.id.toString()}>`].includes(<string>c?.name.toString()));
-                await member.voice.setChannel(channel.first() as any);
+                const channel = allVoiceChannels.filter(c =>
+                    users[`<@${member.id.toString()}>`].includes(<string>c?.name.toString())
+                ).first();
+                await member.voice.setChannel(channel as VoiceBasedChannel);
             }
-            await interaction.reply({
-                content: "ボイスチャンネルを移動しました",
-            });
+            await successMoveReply(interaction);
         } catch (e) {
-            if (e instanceof DiscordAPIError && e.code === 40032) {
-                await interaction.reply({
-                    content: "ボイスチャンネルを移動しました",
-                });
-            } else {
+            if (!(e instanceof DiscordAPIError && e.code === 40032)) {
                 await errorReply(interaction, e);
+            } else {
+                await successMoveReply(interaction);
             }
         }
     }

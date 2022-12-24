@@ -9,6 +9,13 @@ export async function successChannelReply(interaction: CommandInteraction, chann
     await interaction.reply(`${[channelFrom]} から ${[channelTo]} チャンネルに移動しました`);
 }
 
+export async function successMoveReply(interaction: ButtonInteraction) {
+    await interaction.reply({
+        content: "ボイスチャンネルを移動しました",
+        ephemeral: true
+    });
+}
+
 export async function errorReply(interaction: CommandInteraction | ButtonInteraction, e: any) {
     console.error(e);
     if (e instanceof DiscordAPIError) {
