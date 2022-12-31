@@ -3,7 +3,7 @@ import {
     CommandInteraction,
     CommandInteractionOptionResolver,
     VoiceBasedChannel,
-    ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder
+    ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandUserOption, User
 } from "discord.js";
 import {SlashCommandChannelOption} from "@discordjs/builders";
 
@@ -25,11 +25,16 @@ module.exports = {
                 .setDescription("チーム2の移動先チャンネル（例. ロビー）")
                 .addChannelTypes(2)
                 .setRequired(true)
+        ).addUserOption((option: SlashCommandUserOption) =>
+            option
+                .setName("除外メンバー")
+                .setDescription("チーム分けで除外するメンバー")
         ),
     async execute(interaction: CommandInteraction) {
         const options = interaction.options as CommandInteractionOptionResolver;
         const channel1 = options.getChannel("チーム1") as VoiceBasedChannel;
         const channel2 = options.getChannel("チーム2") as VoiceBasedChannel;
+        const excludeMember = options.getUser("除外メンバー");
 
         let currentChannel = (interaction.member as any).voice.channel;
         if (currentChannel == null) {
@@ -37,7 +42,7 @@ module.exports = {
             return;
         }
 
-        const members = currentChannel.members;
+        const members = currentChannel.members.filter((m: User) => m.id !== excludeMember?.id)
         if (members.size < 2) {
             await errorLackPeopleReply(interaction);
             return;
