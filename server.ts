@@ -4,7 +4,7 @@ import {
     GatewayIntentBits,
     Collection,
     Events,
-    DiscordAPIError, VoiceBasedChannel
+    DiscordAPIError, VoiceBasedChannel, ActionRowBuilder, ButtonBuilder, ButtonStyle
 } from "discord.js";
 import dotenv = require("dotenv");
 import fs = require("fs");
@@ -66,6 +66,15 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
                 }
             }
         }
+
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel("チャンネルを移動する")
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(true),
+            );
+        await interaction.update({components: [row as any]})
         await successMoveReply(interaction);
     }
     if (!interaction.isChatInputCommand()) return;
