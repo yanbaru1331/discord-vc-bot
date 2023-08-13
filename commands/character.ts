@@ -12,12 +12,12 @@ module.exports = {
         .setDescription("スマブラSPのキャラクターをランダムに選びます")
         .addNumberOption((option: SlashCommandNumberOption) =>
             option
-                .setName("人数1")
+                .setName("キャラクター数1")
                 .setDescription("チーム1のキャラクター数")
                 .setRequired(true)
         ).addNumberOption((option: SlashCommandNumberOption) =>
             option
-                .setName("人数2")
+                .setName("キャラクター数1")
                 .setDescription("チーム2のキャラクター数")
                 .setRequired(true)
         ),
@@ -34,12 +34,12 @@ module.exports = {
         const embed1 = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle("チーム1")
-            .setDescription(shuffle1.toString().replace(",", ", "));
+            .setDescription(shuffle1.toString().replaceAll(",", ", "));
 
         const embed2 = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle("チーム2")
-            .setDescription(shuffle2.toString().replace(",", ", "));
+            .setDescription(shuffle2.toString().replaceAll(",", ", "));
 
         await interaction.reply({
             embeds: [embed1, embed2],
