@@ -8,6 +8,7 @@ import {
 import {SlashCommandChannelOption} from "@discordjs/builders";
 
 import {errorChannelReply, errorLackPeopleReply} from "../utils/reply";
+import {shuffle} from "../utils/shuffle";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -74,17 +75,6 @@ module.exports = {
             components: [row as any],
         });
     },
-}
-
-function shuffle(array: any): Array<any> {
-    const out = Array.from(array);
-    for (let i = out.length - 1; i > 0; i--) {
-        const r = Math.floor(Math.random() * (i + 1));
-        const tmp = out[i];
-        out[i] = out[r];
-        out[r] = tmp;
-    }
-    return out;
 }
 
 function splitHalf(array: any): Array<any> {
