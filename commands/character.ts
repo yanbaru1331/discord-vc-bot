@@ -1,7 +1,6 @@
 import {
     SlashCommandBuilder,
     CommandInteraction,
-    CommandInteractionOptionResolver,
     ButtonStyle, EmbedBuilder, SlashCommandNumberOption
 } from "discord.js";
 import {shuffle} from "../utils/shuffle";
@@ -22,7 +21,7 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction: CommandInteraction) {
-        const options = interaction.options as CommandInteractionOptionResolver;
+        const options = interaction.options as any;
         const num1 = options.getNumber("キャラクター数1");
         const num2 = options.getNumber("キャラクター数2");
 

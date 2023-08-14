@@ -1,7 +1,6 @@
 import {
     SlashCommandBuilder,
     CommandInteraction,
-    CommandInteractionOptionResolver,
     VoiceBasedChannel,
     ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandUserOption, User
 } from "discord.js";
@@ -32,7 +31,7 @@ module.exports = {
                 .setDescription("チーム分けで除外するメンバー")
         ),
     async execute(interaction: CommandInteraction) {
-        const options = interaction.options as CommandInteractionOptionResolver;
+        const options = interaction.options as any;
         const channel1 = options.getChannel("チーム1") as VoiceBasedChannel;
         const channel2 = options.getChannel("チーム2") as VoiceBasedChannel;
         const excludeMember = options.getUser("除外メンバー");

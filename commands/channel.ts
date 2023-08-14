@@ -1,5 +1,9 @@
-import {SlashCommandBuilder, CommandInteraction, CommandInteractionOptionResolver, VoiceBasedChannel} from "discord.js";
-import {SlashCommandChannelOption} from "@discordjs/builders";
+import {
+    CommandInteraction,
+    SlashCommandBuilder,
+    SlashCommandChannelOption,
+    VoiceBasedChannel
+} from "discord.js";
 
 import {errorChannelReply, successChannelReply} from "../utils/reply";
 
@@ -20,7 +24,8 @@ module.exports = {
                 .addChannelTypes(2)
         ),
     async execute(interaction: CommandInteraction) {
-        const options = interaction.options as CommandInteractionOptionResolver;
+        if (!interaction.isCommand()) return;
+        const options = interaction.options as any;
         const channelTo = options.getChannel("移動先") as VoiceBasedChannel;
         let channelFrom = options.getChannel("移動元") as VoiceBasedChannel;
 

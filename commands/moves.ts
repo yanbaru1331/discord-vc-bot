@@ -1,7 +1,6 @@
 import {
     SlashCommandBuilder,
     CommandInteraction,
-    CommandInteractionOptionResolver,
     SlashCommandUserOption,
     User,
     VoiceBasedChannel, DiscordAPIError, Collection, GuildMember
@@ -42,7 +41,7 @@ module.exports = {
                 .setDescription("移動するユーザーの名前5")
         ),
     async execute(interaction: CommandInteraction) {
-        const options = interaction.options as CommandInteractionOptionResolver;
+        const options = interaction.options as any;
         const channel = options.getChannel("移動先") as VoiceBasedChannel;
 
         const getUser = (n: number) => options.getUser(`ユーザー${n}`);
