@@ -16,7 +16,7 @@ module.exports = {
                 .setRequired(true)
         ).addNumberOption((option: SlashCommandNumberOption) =>
             option
-                .setName("チーム2のキャラクター数2")
+                .setName("チーム2のキャラクター数")
                 .setDescription("チーム2のキャラクター数")
                 .setRequired(true)
         ),
