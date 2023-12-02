@@ -1,3 +1,19 @@
+# Discord VCチャンネル移動bot-guildCommand対応版
+作者の![sakusaku3939](https://github.com/sakusaku3939/discord-vc-bot)氏が作成したものではGuildCommandに対応できていなかったので作成しました
+すべての著作権は![sakusaku3939](https://github.com/sakusaku3939)氏に帰属します
+
+## 環境構築
+```
+npm i
+ts-node add-commands.ts
+```
+
+## 実行
+```
+ts-node server.ts
+```
+
+
 # Discord VCチャンネル移動bot
 ユーザーを指定してボイスチャンネルを移動することができるDiscordボットです。  
 複数ユーザーやチャンネルごとの移動にも対応しています。  

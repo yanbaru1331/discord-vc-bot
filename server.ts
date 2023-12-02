@@ -26,9 +26,8 @@ client.once(Events.ClientReady, (c: Client) => {
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
         const command = require(filePath);
-
         if ("data" in command && "execute" in command) {
-            client.commands.set(command.data.name, command);
+            client.commands.set(command.data.name, command , 727849192361558080);
         } else {
             console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
         }
