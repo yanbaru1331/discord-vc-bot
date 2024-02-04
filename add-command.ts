@@ -10,7 +10,7 @@ const adminCommandFiles = fs.readdirSync("./commands").filter(file => file.endsW
 const adminCommands: any[] = [];
 const commands: any[] = [];
 
-const TOKEN = process.env.TOKEN || 'aaaaaaaaa';
+const TOKEN = process.env.DISCORD_TOKEN || 'aaaaaaaaa';
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 
